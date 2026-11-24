@@ -1,0 +1,222 @@
+{
+  "project": "11_multimodal_image_audio_fusion",
+  "dataset_type": "real_public_paired",
+  "dataset": {
+    "dataset_type": "real_public_paired",
+    "audio_source": "HuggingFace ashraq/esc50 (44.1kHz -> 16kHz Log-Mel 64x96)",
+    "image_source": "torchvision CIFAR-10 (32x32 RGB)",
+    "num_classes": 7,
+    "class_names": [
+      "dog",
+      "cat",
+      "bird",
+      "frog",
+      "airplane",
+      "vehicle",
+      "sea_ship"
+    ],
+    "train_pairs": 1680,
+    "test_pairs": 420,
+    "leakage_audit": {
+      "zero_leakage_verified": true,
+      "train_unique_audio_clips": 352,
+      "test_unique_audio_clips": 88,
+      "audio_id_overlap": 0,
+      "train_folds": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "test_folds": [
+        5
+      ],
+      "fold_overlap": 0,
+      "image_key_overlap": 0
+    }
+  },
+  "hyperparameters": {
+    "epochs": 15,
+    "batch_size": 32,
+    "lr": 0.001,
+    "seed": 42,
+    "amp_fp16": true
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 74.98,
+    "allocated_vram_mb": 24.38,
+    "total_wall_seconds": 154.512
+  },
+  "ablation_results": {
+    "image_only": {
+      "clean": {
+        "accuracy": 0.6,
+        "macro_f1": 0.5968,
+        "mean_alpha": 1.0,
+        "std_alpha": 0.0
+      },
+      "visual_corrupt": {
+        "accuracy": 0.1476,
+        "macro_f1": 0.0631,
+        "mean_alpha": 1.0,
+        "std_alpha": 0.0,
+        "mean_alpha_when_visual_corrupt": 1.0
+      },
+      "audio_corrupt": {
+        "accuracy": 0.6,
+        "macro_f1": 0.5968,
+        "mean_alpha": 1.0,
+        "std_alpha": 0.0,
+        "mean_alpha_when_audio_corrupt": 1.0
+      },
+      "mixed_corrupt": {
+        "accuracy": 0.3929,
+        "macro_f1": 0.4002,
+        "mean_alpha": 1.0,
+        "std_alpha": 0.0,
+        "mean_alpha_when_visual_corrupt": 1.0,
+        "mean_alpha_when_audio_corrupt": 1.0
+      }
+    },
+    "audio_only": {
+      "clean": {
+        "accuracy": 0.75,
+        "macro_f1": 0.7373,
+        "mean_alpha": 0.0,
+        "std_alpha": 0.0
+      },
+      "visual_corrupt": {
+        "accuracy": 0.75,
+        "macro_f1": 0.7373,
+        "mean_alpha": 0.0,
+        "std_alpha": 0.0,
+        "mean_alpha_when_visual_corrupt": 0.0
+      },
+      "audio_corrupt": {
+        "accuracy": 0.1619,
+        "macro_f1": 0.1056,
+        "mean_alpha": 0.0,
+        "std_alpha": 0.0,
+        "mean_alpha_when_audio_corrupt": 0.0
+      },
+      "mixed_corrupt": {
+        "accuracy": 0.4405,
+        "macro_f1": 0.4476,
+        "mean_alpha": 0.0,
+        "std_alpha": 0.0,
+        "mean_alpha_when_visual_corrupt": 0.0,
+        "mean_alpha_when_audio_corrupt": 0.0
+      }
+    },
+    "early_concat": {
+      "clean": {
+        "accuracy": 0.7571,
+        "macro_f1": 0.7281,
+        "mean_alpha": 0.5,
+        "std_alpha": 0.0
+      },
+      "visual_corrupt": {
+        "accuracy": 0.7238,
+        "macro_f1": 0.689,
+        "mean_alpha": 0.5,
+        "std_alpha": 0.0,
+        "mean_alpha_when_visual_corrupt": 0.5
+      },
+      "audio_corrupt": {
+        "accuracy": 0.1524,
+        "macro_f1": 0.0845,
+        "mean_alpha": 0.5,
+        "std_alpha": 0.0,
+        "mean_alpha_when_audio_corrupt": 0.5
+      },
+      "mixed_corrupt": {
+        "accuracy": 0.4214,
+        "macro_f1": 0.4081,
+        "mean_alpha": 0.5,
+        "std_alpha": 0.0,
+        "mean_alpha_when_visual_corrupt": 0.5,
+        "mean_alpha_when_audio_corrupt": 0.5
+      }
+    },
+    "gated_cross_attention": {
+      "clean": {
+        "accuracy": 0.7429,
+        "macro_f1": 0.7186,
+        "mean_alpha": 0.1146,
+        "std_alpha": 0.0669
+      },
+      "visual_corrupt": {
+        "accuracy": 0.7095,
+        "macro_f1": 0.6746,
+        "mean_alpha": 0.1041,
+        "std_alpha": 0.0357,
+        "mean_alpha_when_visual_corrupt": 0.1041
+      },
+      "audio_corrupt": {
+        "accuracy": 0.2952,
+        "macro_f1": 0.2369,
+        "mean_alpha": 0.2069,
+        "std_alpha": 0.0426,
+        "mean_alpha_when_audio_corrupt": 0.2069
+      },
+      "mixed_corrupt": {
+        "accuracy": 0.4952,
+        "macro_f1": 0.4857,
+        "mean_alpha": 0.1542,
+        "std_alpha": 0.0632,
+        "mean_alpha_when_visual_corrupt": 0.1043,
+        "mean_alpha_when_audio_corrupt": 0.204
+      }
+    }
+  },
+  "training_telemetry": {
+    "image_only": {
+      "params": {
+        "total_params": 455687,
+        "trainable_params": 455687
+      },
+      "train_seconds": 23.743,
+      "final_train_loss": 0.8055
+    },
+    "audio_only": {
+      "params": {
+        "total_params": 451183,
+        "trainable_params": 451183
+      },
+      "train_seconds": 25.607,
+      "final_train_loss": 0.2751
+    },
+    "early_concat": {
+      "params": {
+        "total_params": 906351,
+        "trainable_params": 906351
+      },
+      "train_seconds": 38.104,
+      "final_train_loss": 0.2751
+    },
+    "gated_cross_attention": {
+      "params": {
+        "total_params": 1058310,
+        "trainable_params": 1058310
+      },
+      "train_seconds": 61.26,
+      "final_train_loss": 0.7269
+    }
+  },
+  "key_findings": {
+    "gated_clean_accuracy": 0.7429,
+    "gated_mixed_corrupt_accuracy": 0.4952,
+    "image_only_mixed_corrupt_accuracy": 0.3929,
+    "audio_only_mixed_corrupt_accuracy": 0.4405,
+    "early_concat_mixed_corrupt_accuracy": 0.4214,
+    "gate_alpha_clean": 0.1146,
+    "gate_alpha_visual_corrupt": 0.1041,
+    "gate_alpha_audio_corrupt": 0.2069,
+    "gate_adaptation_delta": 0.1028
+  },
+  "artifacts": {
+    "checkpoint": "artifacts/gated_cross_attention_best.pt",
+    "figure": "reports/multimodal_ablation.png"
+  }
+}

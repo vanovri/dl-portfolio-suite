@@ -1,0 +1,76 @@
+{
+  "project": "04_leaf_disease_transfer_learning",
+  "dataset_type": "real_public",
+  "dataset_name": "PlantVillage Stratified 10-Class Subset (128x128 RGB)",
+  "dataset_provenance": "https://huggingface.co/datasets/BrandonFors/Plant-Diseases-PlantVillage-Dataset",
+  "class_names": [
+    "Apple - Apple scab",
+    "Apple - Black rot",
+    "Apple - Cedar apple rust",
+    "Apple - healthy",
+    "Blueberry - healthy",
+    "Cherry (including sour) - Powdery mildew",
+    "Cherry (including sour) - healthy",
+    "Corn (maize) - Cercospora leaf spot Gray leaf spot",
+    "Corn (maize) - Common rust",
+    "Corn (maize) - Northern Leaf Blight"
+  ],
+  "splits": {
+    "train": 1600,
+    "val": 400,
+    "test": 500,
+    "img_size": 128
+  },
+  "models": {
+    "efficientnet_b0": {
+      "architecture": "efficientnet_b0",
+      "pretrained": true,
+      "total_params": 4020358,
+      "trainable_params": 4020358,
+      "weight_size_mb": 15.63,
+      "best_epoch": 7,
+      "best_val_accuracy": 0.9775,
+      "elapsed_s": 127.284,
+      "peak_vram_mb": 544.89,
+      "test_metrics": {
+        "accuracy": 0.978,
+        "macro_f1": 0.978,
+        "top3_accuracy": 0.996,
+        "inference_ms_per_image": 12.016
+      },
+      "checkpoint": "artifacts/efficientnet_b0_leaf.pt"
+    },
+    "mobilenet_v3_small": {
+      "architecture": "mobilenet_v3_small",
+      "pretrained": true,
+      "total_params": 1528106,
+      "trainable_params": 1528106,
+      "weight_size_mb": 5.96,
+      "best_epoch": 8,
+      "best_val_accuracy": 0.98,
+      "elapsed_s": 69.933,
+      "peak_vram_mb": 127.96,
+      "test_metrics": {
+        "accuracy": 0.97,
+        "macro_f1": 0.97,
+        "top3_accuracy": 0.998,
+        "inference_ms_per_image": 2.587
+      },
+      "checkpoint": "artifacts/mobilenet_v3_small_leaf.pt"
+    }
+  },
+  "comparison": {
+    "accuracy_delta_eff_minus_mob": 0.008,
+    "speedup_mob_vs_eff": 4.64,
+    "size_ratio_eff_vs_mob": 2.62
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "max_peak_vram_mb": 544.89
+  },
+  "artifacts": {
+    "model_comparison_plot": "reports/model_comparison.png",
+    "efficientnet_b0_checkpoint": "artifacts/efficientnet_b0_leaf.pt",
+    "mobilenet_v3_small_checkpoint": "artifacts/mobilenet_v3_small_leaf.pt"
+  }
+}

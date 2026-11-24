@@ -1,0 +1,165 @@
+{
+  "project": "07_wesad_stress_bilstm",
+  "dataset_type": "real_public",
+  "dataset_provenance": {
+    "dataset_id": "LouisSimon/wesad-parquet",
+    "dataset_file": "wesad_4_3_120.parquet",
+    "dataset_type": "real_public",
+    "source": "huggingface_hub:wesad_4_3_120.parquet",
+    "num_rows": 11044,
+    "num_subjects": 15,
+    "columns": [
+      "acc_x",
+      "acc_y",
+      "acc_z",
+      "bvp",
+      "eda",
+      "temp",
+      "ctxt_acc_x",
+      "ctxt_acc_y",
+      "ctxt_acc_z",
+      "ctxt_bvp",
+      "ctxt_eda",
+      "ctxt_temp",
+      "stress",
+      "user"
+    ]
+  },
+  "label_info": {
+    "raw_unique_values": [
+      "1",
+      "2",
+      "3"
+    ],
+    "mapping_rule": "wesad_protocol_class_2_as_stress",
+    "num_classes": 2,
+    "class_names": [
+      "non_stress",
+      "stress"
+    ],
+    "row_counts": {
+      "non_stress": 7722,
+      "stress": 3322
+    },
+    "window_counts": {
+      "non_stress": 7722,
+      "stress": 3322
+    },
+    "input_format": "empatica_e4_array_windows_resampled_16hz"
+  },
+  "split_protocol": {
+    "strategy": "strict_subject_independent_group_split",
+    "zero_subject_leakage_verified": true,
+    "train_users": [
+      "10",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "2",
+      "4",
+      "5",
+      "6",
+      "9"
+    ],
+    "val_users": [
+      "11",
+      "7"
+    ],
+    "test_users": [
+      "3",
+      "8"
+    ],
+    "num_windows": {
+      "train": 8116,
+      "val": 1475,
+      "test": 1453
+    }
+  },
+  "hyperparameters": {
+    "epochs": 15,
+    "batch_size": 64,
+    "lr": 0.001,
+    "window_len": 64,
+    "stride": 32,
+    "fs_hz": 4.0,
+    "seed": 42
+  },
+  "model": {
+    "architecture": "BiLSTMAttentionStressNet",
+    "total_params": 183922,
+    "trainable_params": 183922,
+    "best_val_macro_f1": 0.8171,
+    "test_loss": 0.7124
+  },
+  "test_metrics_bilstm": {
+    "accuracy": 0.8933,
+    "macro_f1": 0.8676,
+    "stress_f1": 0.8093,
+    "roc_auc": 0.853,
+    "pr_auc": 0.8478,
+    "confusion_matrix": [
+      [
+        969,
+        47
+      ],
+      [
+        108,
+        329
+      ]
+    ]
+  },
+  "classical_baselines": {
+    "logistic_regression": {
+      "accuracy": 0.8534,
+      "macro_f1": 0.8256,
+      "stress_f1": 0.756,
+      "roc_auc": 0.8947,
+      "pr_auc": 0.7734,
+      "confusion_matrix": [
+        [
+          910,
+          106
+        ],
+        [
+          107,
+          330
+        ]
+      ]
+    },
+    "random_forest": {
+      "accuracy": 0.8775,
+      "macro_f1": 0.849,
+      "stress_f1": 0.7835,
+      "roc_auc": 0.8677,
+      "pr_auc": 0.8006,
+      "confusion_matrix": [
+        [
+          953,
+          63
+        ],
+        [
+          115,
+          322
+        ]
+      ]
+    },
+    "best_classical_model": "random_forest"
+  },
+  "bilstm_vs_best_classical_delta": {
+    "macro_f1_delta": 0.0186,
+    "accuracy_delta": 0.0158,
+    "roc_auc_delta": -0.0147
+  },
+  "runtime": {
+    "train_elapsed_s": 41.817,
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 85.73,
+    "allocated_vram_mb": 20.27
+  },
+  "artifacts": {
+    "checkpoint": "artifacts/bilstm_stress_best.pt",
+    "figure": "reports/stress_signals_attention.png"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "project": "05_indo_car_classifier_marketplace",
+  "dataset_type": "real_public",
+  "dataset_name": "Stanford Cars 10-Class Indonesian-Popular Brand Subset (160x160 RGB)",
+  "dataset_provenance": "https://huggingface.co/datasets/tanganke/stanford_cars",
+  "class_names": [
+    "Toyota Sequoia SUV 2012",
+    "Honda Odyssey Minivan 2012",
+    "Suzuki Aerio Sedan 2007",
+    "Hyundai Veloster Hatchback 2012",
+    "Mercedes-Benz 300-Class Convertible 1993",
+    "Audi RS 4 Convertible 2008",
+    "Nissan Leaf Hatchback 2012",
+    "Mitsubishi Lancer Sedan 2012",
+    "Ford F-450 Super Duty Crew Cab 2012",
+    "Chevrolet Silverado 1500 Hybrid Crew Cab 2012"
+  ],
+  "splits": {
+    "train": 332,
+    "val": 79,
+    "test": 200,
+    "img_size": 160
+  },
+  "model": {
+    "architecture": "EfficientNet-B0",
+    "pretrained": true,
+    "total_params": 4020358,
+    "trainable_params": 4020358
+  },
+  "training": {
+    "epochs": 10,
+    "best_epoch": 8,
+    "best_val_top1_acc": 0.8734,
+    "batch_size": 24,
+    "lr": 0.0004,
+    "amp_fp16": true,
+    "elapsed_s": 40.128,
+    "history_tail": [
+      {
+        "epoch": 6,
+        "train_loss": 0.4222,
+        "val_top1_acc": 0.8608,
+        "val_macro_f1": 0.8603
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.3712,
+        "val_top1_acc": 0.8734,
+        "val_macro_f1": 0.8719
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.366,
+        "val_top1_acc": 0.8734,
+        "val_macro_f1": 0.8719
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.3591,
+        "val_top1_acc": 0.8608,
+        "val_macro_f1": 0.8588
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.3507,
+        "val_top1_acc": 0.8608,
+        "val_macro_f1": 0.858
+      }
+    ]
+  },
+  "test_metrics": {
+    "top1_accuracy": 0.86,
+    "top3_accuracy": 0.965,
+    "macro_f1": 0.8573,
+    "api_p50_ms": 54.54,
+    "api_p95_ms": 73.5,
+    "api_requests_benchmarked": 25
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 617.66,
+    "allocated_vram_mb": 108.67
+  },
+  "artifacts": {
+    "checkpoint": "artifacts/efficientnet_b0_indo_cars.pt",
+    "car_predictions_gallery": "reports/car_predictions_gallery.png"
+  }
+}

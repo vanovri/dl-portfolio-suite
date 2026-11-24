@@ -1,0 +1,57 @@
+{
+  "project": "06_yolov8_detection_segmentation",
+  "dataset_type": "real_public",
+  "datasets": {
+    "detection": "Ultralytics official coco8.yaml (COCO128 8-image split)",
+    "segmentation": "Ultralytics official coco8-seg.yaml (COCO instance masks)",
+    "roboflow_adapter": "src/roboflow_adapter.py (drop-in Roboflow YOLOv8 data.yaml & polygon validator)"
+  },
+  "training": {
+    "epochs": 10,
+    "batch_size": 4,
+    "imgsz": 320,
+    "workers": 0,
+    "det_elapsed_s": 18.654,
+    "seg_elapsed_s": 17.629
+  },
+  "detection": {
+    "model": "yolov8n",
+    "total_params": 3157200,
+    "trainable_params": 0,
+    "metrics": {
+      "box_map50": 0.6193,
+      "box_map50_95": 0.4475,
+      "precision": 0.6323,
+      "recall": 0.6333,
+      "fps": 54.53,
+      "ms_per_frame": 18.34,
+      "frames_benchmarked": 48
+    }
+  },
+  "segmentation": {
+    "model": "yolov8n-seg",
+    "total_params": 3409968,
+    "trainable_params": 0,
+    "metrics": {
+      "box_map50": 0.5494,
+      "box_map50_95": 0.3947,
+      "mask_map50": 0.4762,
+      "mask_map50_95": 0.3176,
+      "precision": 0.5719,
+      "recall": 0.5265,
+      "fps": 51.1,
+      "ms_per_frame": 19.57,
+      "frames_benchmarked": 48
+    }
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 611.09,
+    "allocated_vram_mb": 228.28
+  },
+  "artifacts": {
+    "det_checkpoint": "artifacts/yolov8n_coco8_best.pt",
+    "seg_checkpoint": "artifacts/yolov8n_seg_coco8_best.pt",
+    "comparison_plot": "reports/yolo_det_vs_seg.png"
+  }
+}

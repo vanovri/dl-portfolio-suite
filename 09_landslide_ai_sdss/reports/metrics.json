@@ -1,0 +1,282 @@
+{
+  "project": "09_landslide_ai_sdss",
+  "dataset_type": "real_public",
+  "dataset_provenance": {
+    "dataset_id": "ibm-nasa-geospatial/Landslide4sense",
+    "dataset_type": "real_public",
+    "source": "local_npz_cache",
+    "in_channels": 14,
+    "tile_size": 128,
+    "raw_schema": {
+      "image_key": "img",
+      "mask_key": "mask",
+      "channels": 14,
+      "height": 128,
+      "width": 128,
+      "shards_fetched": 2,
+      "paired_pool_size": 596,
+      "scanned_samples": 407,
+      "collected_tiles": 320,
+      "positive_tiles": 208,
+      "negative_tiles": 112
+    },
+    "splits": {
+      "train": {
+        "source_split": "train",
+        "tiles": 320,
+        "positive_tiles": 208
+      },
+      "val": {
+        "source_split": "validation",
+        "tiles": 80,
+        "positive_tiles": 52
+      },
+      "test": {
+        "source_split": "test",
+        "tiles": 100,
+        "positive_tiles": 65
+      }
+    },
+    "train_landslide_pixel_rate": 0.019967,
+    "test_landslide_pixel_rate": 0.027332
+  },
+  "hyperparameters": {
+    "epochs": 15,
+    "batch_size": 8,
+    "lr": 0.001,
+    "tile_size": 128,
+    "pos_weight": 12.0,
+    "fp16_amp": false,
+    "seed": 42
+  },
+  "model": {
+    "architecture": "SpatialResUNet",
+    "in_channels": 14,
+    "total_params": 2018049,
+    "trainable_params": 2018049,
+    "best_val_iou": 0.4815,
+    "history": {
+      "train_loss": [
+        0.49225,
+        0.45145,
+        0.42644,
+        0.41266,
+        0.39063,
+        0.38153,
+        0.37276,
+        0.3628,
+        0.35411,
+        0.34127,
+        0.34046,
+        0.33455,
+        0.32186,
+        0.31993,
+        0.31536
+      ],
+      "val_loss": [
+        0.5088,
+        0.48925,
+        0.4722,
+        0.47369,
+        0.47691,
+        0.45218,
+        0.44221,
+        0.4628,
+        0.43314,
+        0.43466,
+        0.41799,
+        0.43196,
+        0.42332,
+        0.42578,
+        0.41367
+      ],
+      "val_iou": [
+        0.1778,
+        0.2872,
+        0.3007,
+        0.2832,
+        0.1512,
+        0.2197,
+        0.3052,
+        0.215,
+        0.388,
+        0.4815,
+        0.4099,
+        0.3708,
+        0.4177,
+        0.4668,
+        0.4328
+      ],
+      "val_f1": [
+        0.3019,
+        0.4463,
+        0.4624,
+        0.4414,
+        0.2626,
+        0.3603,
+        0.4677,
+        0.3539,
+        0.559,
+        0.65,
+        0.5815,
+        0.541,
+        0.5892,
+        0.6365,
+        0.6041
+      ]
+    }
+  },
+  "test_metrics": {
+    "loss": 0.4623,
+    "pixel_roc_auc": 0.9771,
+    "pixel_pr_auc": 0.6441,
+    "pixel_f1": 0.6371,
+    "pixel_iou": 0.4675,
+    "landslide_recall": 0.6783,
+    "landslide_precision": 0.6007,
+    "positive_tile_detection_accuracy": 0.73
+  },
+  "sdss_sample_tile_assessment": {
+    "tile_index": 58,
+    "overall_risk_tier": "Critical",
+    "advisory": "Evacuate",
+    "max_probability": 0.9822,
+    "tier_coverage_pct": {
+      "low": 79.51,
+      "moderate": 5.15,
+      "high": 5.78,
+      "critical": 9.56
+    },
+    "high_or_critical_area_ha": 25.13,
+    "hazard_zone_count": 4,
+    "geojson_preview_features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "zone_id": 1,
+          "risk_tier": "Critical",
+          "advisory": "Evacuate",
+          "pixel_count": 429,
+          "area_ha": 4.29,
+          "max_probability": 0.9822,
+          "mean_probability": 0.8053
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                106.8083,
+                -6.8981
+              ],
+              [
+                106.8112,
+                -6.8981
+              ],
+              [
+                106.8112,
+                -6.8952
+              ],
+              [
+                106.8083,
+                -6.8952
+              ],
+              [
+                106.8083,
+                -6.8981
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "zone_id": 2,
+          "risk_tier": "Critical",
+          "advisory": "Evacuate",
+          "pixel_count": 2053,
+          "area_ha": 20.53,
+          "max_probability": 0.9789,
+          "mean_probability": 0.7795
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                106.8024,
+                -6.8977
+              ],
+              [
+                106.8079,
+                -6.8977
+              ],
+              [
+                106.8079,
+                -6.8872
+              ],
+              [
+                106.8024,
+                -6.8872
+              ],
+              [
+                106.8024,
+                -6.8977
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "zone_id": 3,
+          "risk_tier": "Critical",
+          "advisory": "Evacuate",
+          "pixel_count": 21,
+          "area_ha": 0.21,
+          "max_probability": 0.8879,
+          "mean_probability": 0.6891
+        },
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                106.8107,
+                -6.8939
+              ],
+              [
+                106.8113,
+                -6.8939
+              ],
+              [
+                106.8113,
+                -6.893
+              ],
+              [
+                106.8107,
+                -6.893
+              ],
+              [
+                106.8107,
+                -6.8939
+              ]
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "runtime": {
+    "train_elapsed_s": 68.497,
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 592.33,
+    "allocated_vram_mb": 49.61
+  },
+  "artifacts": {
+    "checkpoint": "artifacts/resunet_landslide_best.pt",
+    "figure": "reports/landslide_sdss_map.png"
+  }
+}

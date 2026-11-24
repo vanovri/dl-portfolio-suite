@@ -1,0 +1,132 @@
+{
+  "project": "02_cervical_cancer_segmentation",
+  "dataset_type": "real_public",
+  "datasets": {
+    "primary_segmentation": "https://huggingface.co/datasets/DataTorchio/nuclei-segmentation-dsb2018",
+    "downstream_biopsy": "https://huggingface.co/datasets/MakAIHealthLab/cervical-cancer-biopsy-dataset"
+  },
+  "splits": {
+    "train": 536,
+    "val": 67,
+    "test": 67,
+    "img_size": 128
+  },
+  "ablation": {
+    "plain_unet": {
+      "training": {
+        "best_epoch": 13,
+        "best_val_dice": 0.876,
+        "elapsed_s": 72.104,
+        "history_tail": [
+          {
+            "epoch": 11,
+            "train_loss": 0.1916,
+            "val_dice": 0.8756
+          },
+          {
+            "epoch": 12,
+            "train_loss": 0.1887,
+            "val_dice": 0.8742
+          },
+          {
+            "epoch": 13,
+            "train_loss": 0.1856,
+            "val_dice": 0.876
+          },
+          {
+            "epoch": 14,
+            "train_loss": 0.1834,
+            "val_dice": 0.873
+          },
+          {
+            "epoch": 15,
+            "train_loss": 0.1825,
+            "val_dice": 0.8726
+          }
+        ],
+        "total_params": 7763041,
+        "trainable_params": 7763041
+      },
+      "test_metrics": {
+        "dice": 0.8797,
+        "iou": 0.7852,
+        "precision": 0.8655,
+        "recall": 0.8944,
+        "boundary_f1": 0.9661
+      }
+    },
+    "attention_unet": {
+      "training": {
+        "best_epoch": 15,
+        "best_val_dice": 0.8713,
+        "elapsed_s": 79.397,
+        "history_tail": [
+          {
+            "epoch": 11,
+            "train_loss": 0.1793,
+            "val_dice": 0.8712
+          },
+          {
+            "epoch": 12,
+            "train_loss": 0.1775,
+            "val_dice": 0.8687
+          },
+          {
+            "epoch": 13,
+            "train_loss": 0.1746,
+            "val_dice": 0.8702
+          },
+          {
+            "epoch": 14,
+            "train_loss": 0.1752,
+            "val_dice": 0.8713
+          },
+          {
+            "epoch": 15,
+            "train_loss": 0.1724,
+            "val_dice": 0.8713
+          }
+        ],
+        "total_params": 7851773,
+        "trainable_params": 7851773
+      },
+      "test_metrics": {
+        "dice": 0.8739,
+        "iou": 0.776,
+        "precision": 0.8625,
+        "recall": 0.8856,
+        "boundary_f1": 0.965
+      }
+    },
+    "delta_attention_minus_plain": {
+      "dice": -0.0058,
+      "iou": -0.0092,
+      "precision": -0.003,
+      "recall": -0.0088,
+      "boundary_f1": -0.0011
+    }
+  },
+  "cervical_biopsy_morphometry": {
+    "total_biopsy_images": 40,
+    "overall_mean_nc_ratio": 0.2468,
+    "overall_mean_nuclei_count": 23.1,
+    "by_class": {
+      "Adenocarcinoma": {
+        "count": 40,
+        "mean_nc_ratio": 0.2468,
+        "std_nc_ratio": 0.1065,
+        "mean_nuclei_count": 23.1
+      }
+    }
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 1153.21,
+    "allocated_vram_mb": 125.02
+  },
+  "artifacts": {
+    "plain_unet_checkpoint": "artifacts/plain_unet_nuclei.pt",
+    "attention_unet_checkpoint": "artifacts/attention_unet_nuclei.pt",
+    "segmentation_overlay": "reports/segmentation_overlay.png"
+  }
+}

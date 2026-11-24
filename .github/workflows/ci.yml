@@ -1,0 +1,213 @@
+name: CI - Hygiene & 13-Domain Test Suite
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  hygiene-and-ledger:
+    name: Strict Hygiene & Benchmark Ledger Gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run strict pre-push hygiene check
+        run: node scripts/pre-push-hygiene.mjs . --strict-docs
+
+      - name: Validate MASTER_BENCHMARK_LEDGER and 13 metrics.json artifacts
+        run: |
+          node -e '
+            const fs = require("fs");
+            const path = require("path");
+            const ledgerPath = "MASTER_BENCHMARK_LEDGER.json";
+            if (!fs.existsSync(ledgerPath)) {
+              throw new Error("Missing MASTER_BENCHMARK_LEDGER.json");
+            }
+            const ledger = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
+            if (ledger.completed_projects !== 13 || ledger.missing_projects.length !== 0) {
+              throw new Error(`Incomplete ledger: ${ledger.completed_projects}/13`);
+            }
+
+            const dirs = fs.readdirSync(".")
+              .filter((d) => /^[0-9]{2}_/.test(d) && fs.statSync(d).isDirectory())
+              .sort();
+            if (dirs.length !== 13) {
+              throw new Error(`Expected 13 project directories, found ${dirs.length}`);
+            }
+            for (const dir of dirs) {
+              const mp = path.join(dir, "reports", "metrics.json");
+              if (!fs.existsSync(mp)) {
+                throw new Error(`Missing ${mp}`);
+              }
+              JSON.parse(fs.readFileSync(mp, "utf8"));
+            }
+            console.log(`Verified ${ledgerPath} and ${dirs.length}/13 metrics.json files.`);
+          '
+
+  pytest-cpu-suite:
+    name: CPU Unit Tests (13 Projects / 149 Tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CUDA_VISIBLE_DEVICES: ""
+      MPLBACKEND: "Agg"
+      TOKENIZERS_PARALLELISM: "false"
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      YOLO_VERBOSE: "false"
+      YOLO_AUTOINSTALL: "false"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUTF8: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install headless Linux shared libraries (OpenCV)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libgl1 libglib2.0-0
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache uv wheel store
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/uv
+          key: uv-cpu-${{ runner.os }}-py312-${{ hashFiles('.github/workflows/ci.yml', '**/requirements*.txt', '**/pyproject.toml') }}
+          restore-keys: |
+            uv-cpu-${{ runner.os }}-py312-
+
+      - name: Install CPU-only PyTorch and cross-platform dependencies via uv
+        run: |
+          python -m pip install --upgrade uv
+
+          # 1. Lock lightweight CPU-only PyTorch wheels (skips ~2.5 GB CUDA downloads)
+          uv pip install --system \
+            --index-url https://download.pytorch.org/whl/cpu \
+            torch torchvision torchaudio
+
+          # 2. Install scientific, CV, NLP, geospatial, and FastAPI test packages
+          uv pip install --system \
+            pytest numpy scipy pandas scikit-learn matplotlib pillow \
+            opencv-python-headless pyarrow h5py fastapi uvicorn httpx pydantic \
+            transformers tokenizers sentencepiece datasets huggingface_hub accelerate \
+            timm medmnist ultralytics pyyaml tqdm safetensors
+
+          # 3. Merge any root or per-project requirements.txt while stripping Windows/CUDA pins
+          python - << 'PY'
+          import glob, os, pathlib, re
+
+          skip_re = re.compile(
+              r"^(torch|torchvision|torchaudio|triton|nvidia-[a-z0-9_-]+|pywin32|pywinpty|wmi)"
+              r"([=<>!~\[\s]|$)|^--(?:extra-)?index-url|^--find-links|\+cu\d+",
+              re.IGNORECASE,
+          )
+          seen, cleaned = set(), []
+          req_files = sorted(
+              glob.glob("requirements*.txt") + glob.glob("[0-9][0-9]_*/requirements*.txt")
+          )
+          for rf in req_files:
+              for raw in pathlib.Path(rf).read_text(encoding="utf-8").splitlines():
+                  line = raw.split("#", 1)[0].strip()
+                  if not line or line.startswith("-r") or skip_re.search(line):
+                      continue
+                  key = line.lower()
+                  if key not in seen:
+                      seen.add(key)
+                      cleaned.append(line)
+
+          out_file = pathlib.Path(os.environ["RUNNER_TEMP"]) / "ci-requirements.txt"
+          out_file.write_text("\n".join(cleaned) + ("\n" if cleaned else ""), encoding="utf-8")
+          print(f"Merged {len(cleaned)} sanitized requirement lines from {len(req_files)} file(s).")
+          PY
+
+          if [ -s "$RUNNER_TEMP/ci-requirements.txt" ]; then
+            uv pip install --system -r "$RUNNER_TEMP/ci-requirements.txt"
+          fi
+
+      - name: Run isolated pytest per project and assert >= 149 passing tests
+        run: |
+          python - << 'PY'
+          import glob, os, re, subprocess, sys, time
+
+          repo_root = os.path.abspath(".")
+          projects = sorted(d for d in glob.glob("[0-9][0-9]_*") if os.path.isdir(d))
+          if len(projects) != 13:
+              print(f"Expected 13 project directories, found {len(projects)}: {projects}")
+              sys.exit(1)
+
+          rows = []
+          total_passed = 0
+          failed_projects = []
+          suite_start = time.perf_counter()
+
+          for proj in projects:
+              proj_abs = os.path.abspath(proj)
+              env = os.environ.copy()
+              py_paths = [repo_root, proj_abs]
+              if env.get("PYTHONPATH"):
+                  py_paths.append(env["PYTHONPATH"])
+              env["PYTHONPATH"] = os.pathsep.join(py_paths)
+
+              t0 = time.perf_counter()
+              proc = subprocess.run(
+                  [sys.executable, "-m", "pytest", "-o", "addopts=", "-W", "ignore", "-q", "--tb=short", "tests"],
+                  cwd=proj_abs,
+                  env=env,
+                  capture_output=True,
+                  text=True,
+              )
+              elapsed = time.perf_counter() - t0
+              output = ((proc.stdout or "") + "\n" + (proc.stderr or "")).strip()
+              print(f"\n=== {proj} ({elapsed:.2f}s | rc={proc.returncode}) ===")
+              print(output)
+
+              match = re.search(r"(\d+)\s+passed", output)
+              passed = int(match.group(1)) if match else 0
+              total_passed += passed
+
+              ok = proc.returncode == 0 and passed > 0
+              if not ok:
+                  failed_projects.append(proj)
+              rows.append((proj, "PASS" if ok else "FAIL", passed, f"{elapsed:.2f}s"))
+
+          total_time = time.perf_counter() - suite_start
+          summary = [
+              "### DL Portfolio Suite - CPU Test Matrix",
+              "",
+              "| Project | Status | Tests Passed | Duration |",
+              "|---|---|---:|---:|",
+          ]
+          for proj, status, passed, dur in rows:
+              summary.append(f"| `{proj}` | **{status}** | {passed} | {dur} |")
+          verdict = "ALL PASS" if not failed_projects and total_passed >= 149 else "FAILED"
+          summary.append(f"| **Total (13/13)** | **{verdict}** | **{total_passed}** | **{total_time:.2f}s** |")
+
+          summary_file = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary_file:
+              with open(summary_file, "a", encoding="utf-8") as fh:
+                  fh.write("\n".join(summary) + "\n")
+
+          print(f"\nFINAL: {13 - len(failed_projects)}/13 PASS | TOTAL_PASSED={total_passed} | {total_time:.2f}s")
+          if failed_projects or total_passed < 149:
+              print(f"Gate failed: failed_projects={failed_projects}, total_passed={total_passed} (expected >= 149)")
+              sys.exit(1)
+          PY

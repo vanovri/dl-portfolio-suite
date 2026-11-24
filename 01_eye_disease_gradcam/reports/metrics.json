@@ -1,0 +1,81 @@
+{
+  "project": "01_eye_disease_gradcam",
+  "dataset_type": "real_public",
+  "dataset_name": "MedMNIST v2 RetinaMNIST (128x128 RGB)",
+  "dataset_provenance": "https://zenodo.org/records/10519652/files/retinamnist_128.npz",
+  "compatible_imagefolder_reference": "dlzcods/eye-disease-classification (cataract, diabetic_retinopathy, glaucoma, normal)",
+  "splits": {
+    "train": 1080,
+    "val": 120,
+    "test": 400
+  },
+  "model": {
+    "architecture": "ResNet-18 (dropout=0.3)",
+    "pretrained": true,
+    "img_size": 128,
+    "total_params": 11179077,
+    "trainable_params": 11179077
+  },
+  "training": {
+    "epochs": 12,
+    "best_epoch": 6,
+    "batch_size": 32,
+    "lr": 0.0003,
+    "amp_fp16": true,
+    "elapsed_s": 103.131,
+    "history_tail": [
+      {
+        "epoch": 8,
+        "train_loss": 0.695,
+        "val_accuracy": 0.575,
+        "val_macro_f1": 0.4761,
+        "val_qwk": 0.6292
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.6359,
+        "val_accuracy": 0.5833,
+        "val_macro_f1": 0.4697,
+        "val_qwk": 0.5623
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.5873,
+        "val_accuracy": 0.5917,
+        "val_macro_f1": 0.4792,
+        "val_qwk": 0.6653
+      },
+      {
+        "epoch": 11,
+        "train_loss": 0.518,
+        "val_accuracy": 0.5917,
+        "val_macro_f1": 0.4657,
+        "val_qwk": 0.5882
+      },
+      {
+        "epoch": 12,
+        "train_loss": 0.5008,
+        "val_accuracy": 0.5917,
+        "val_macro_f1": 0.4608,
+        "val_qwk": 0.6308
+      }
+    ]
+  },
+  "test_metrics": {
+    "accuracy": 0.6225,
+    "macro_f1": 0.5445,
+    "quadratic_weighted_kappa": 0.7387,
+    "ovr_macro_roc_auc": 0.8414,
+    "inference_ms_per_image": 2.484
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 314.47,
+    "allocated_vram_mb": 237.28
+  },
+  "artifacts": {
+    "checkpoint": "artifacts/resnet18_retinamnist.pt",
+    "gradcam_gallery": "reports/gradcam_gallery.png",
+    "confusion_roc": "reports/confusion_roc.png"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "project": "03_corrosion_unet_segmentation",
+  "dataset_type": "real_public",
+  "dataset_name": "Dodon Corrosion LabelMe Polygon Segmentation",
+  "dataset_provenance": "https://huggingface.co/datasets/Dodon/Corrosion",
+  "eval_split_used": "test",
+  "splits": {
+    "train": 337,
+    "valid": 59,
+    "test": 44,
+    "img_size": 192
+  },
+  "model": {
+    "architecture": "ResNet18UNet",
+    "pretrained": true,
+    "total_params": 14365025,
+    "trainable_params": 14365025
+  },
+  "training": {
+    "epochs": 20,
+    "best_epoch": 16,
+    "best_val_dice": 0.7822,
+    "batch_size": 12,
+    "lr": 0.0003,
+    "amp_fp16": false,
+    "elapsed_s": 104.942,
+    "history_tail": [
+      {
+        "epoch": 16,
+        "train_loss": 0.2405,
+        "val_dice": 0.7822
+      },
+      {
+        "epoch": 17,
+        "train_loss": 0.2416,
+        "val_dice": 0.779
+      },
+      {
+        "epoch": 18,
+        "train_loss": 0.2365,
+        "val_dice": 0.7817
+      },
+      {
+        "epoch": 19,
+        "train_loss": 0.2372,
+        "val_dice": 0.7798
+      },
+      {
+        "epoch": 20,
+        "train_loss": 0.237,
+        "val_dice": 0.7751
+      }
+    ]
+  },
+  "test_metrics": {
+    "dice": 0.772,
+    "iou": 0.6286,
+    "precision": 0.7329,
+    "recall": 0.8155,
+    "corrosion_area_mae_pct": 5.849,
+    "severity_grade_accuracy": 0.7727,
+    "inference_fps": 197.03
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 1123.43,
+    "allocated_vram_mb": 281.73
+  },
+  "artifacts": {
+    "checkpoint": "artifacts/resnet18_unet_corrosion.pt",
+    "corrosion_predictions": "reports/corrosion_predictions.png"
+  }
+}

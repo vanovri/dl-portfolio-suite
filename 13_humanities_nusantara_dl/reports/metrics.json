@@ -1,0 +1,359 @@
+{
+  "project": "13_humanities_nusantara_dl",
+  "dataset_type": "real_public",
+  "hyperparameters": {
+    "epochs": 15,
+    "batch_size": 32,
+    "lr": 0.001,
+    "max_pantun_stanzas": 3000,
+    "seed": 42,
+    "amp_fp16": true
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 83.62,
+    "allocated_vram_mb": 16.25,
+    "total_wall_seconds": 78.832
+  },
+  "track_a_classical_literature": {
+    "source": "HuggingFace merve/poetry",
+    "n_deduplicated_poems": 504,
+    "era_classification": {
+      "n_train": 378,
+      "n_val": 50,
+      "n_test": 76,
+      "class_names": [
+        "Renaissance",
+        "Modern"
+      ],
+      "dual_scale_neural": {
+        "accuracy": 0.8816,
+        "macro_f1": 0.879,
+        "roc_auc": 0.9542,
+        "val_best_macro_f1": 0.8967,
+        "train_seconds": 6.835,
+        "params": {
+          "total_params": 676882,
+          "trainable_params": 676882
+        }
+      },
+      "tfidf_char_word_baseline": {
+        "accuracy": 0.9342,
+        "macro_f1": 0.9322,
+        "roc_auc": 0.988
+      },
+      "top_salient_tokens": {
+        "Renaissance": [
+          {
+            "token": "part",
+            "attention": 0.0237
+          },
+          {
+            "token": "nor",
+            "attention": 0.0234
+          },
+          {
+            "token": "slow",
+            "attention": 0.0227
+          },
+          {
+            "token": "birds",
+            "attention": 0.0226
+          },
+          {
+            "token": "yet",
+            "attention": 0.0215
+          },
+          {
+            "token": "bliss",
+            "attention": 0.0208
+          },
+          {
+            "token": "hill",
+            "attention": 0.0198
+          },
+          {
+            "token": "dies",
+            "attention": 0.0191
+          }
+        ],
+        "Modern": [
+          {
+            "token": "poetry",
+            "attention": 0.1225
+          },
+          {
+            "token": "august",
+            "attention": 0.0854
+          },
+          {
+            "token": "permission",
+            "attention": 0.0778
+          },
+          {
+            "token": "new",
+            "attention": 0.0526
+          },
+          {
+            "token": "wallace",
+            "attention": 0.0478
+          },
+          {
+            "token": "pound",
+            "attention": 0.039
+          },
+          {
+            "token": "ezra",
+            "attention": 0.0363
+          },
+          {
+            "token": "stevens",
+            "attention": 0.0341
+          }
+        ]
+      }
+    },
+    "theme_classification": {
+      "n_train": 378,
+      "n_val": 50,
+      "n_test": 76,
+      "class_names": [
+        "Love",
+        "Nature",
+        "Mythology & Folklore"
+      ],
+      "dual_scale_neural": {
+        "accuracy": 0.6974,
+        "macro_f1": 0.5861,
+        "roc_auc": 0.7625,
+        "val_best_macro_f1": 0.5458,
+        "train_seconds": 5.96,
+        "params": {
+          "total_params": 677043,
+          "trainable_params": 677043
+        }
+      },
+      "tfidf_char_word_baseline": {
+        "accuracy": 0.7105,
+        "macro_f1": 0.6292,
+        "roc_auc": 0.7927
+      },
+      "top_salient_tokens": {
+        "Love": [
+          {
+            "token": "arise",
+            "attention": 0.0269
+          },
+          {
+            "token": "begin",
+            "attention": 0.0251
+          },
+          {
+            "token": "mirth",
+            "attention": 0.0234
+          },
+          {
+            "token": "kiss",
+            "attention": 0.0212
+          },
+          {
+            "token": "comes",
+            "attention": 0.0209
+          },
+          {
+            "token": "service",
+            "attention": 0.0202
+          },
+          {
+            "token": "truth",
+            "attention": 0.0183
+          },
+          {
+            "token": "gate",
+            "attention": 0.0182
+          }
+        ],
+        "Nature": [
+          {
+            "token": "collected",
+            "attention": 0.0415
+          },
+          {
+            "token": "crane",
+            "attention": 0.0401
+          },
+          {
+            "token": "corporation",
+            "attention": 0.0362
+          },
+          {
+            "token": "wallace",
+            "attention": 0.0349
+          },
+          {
+            "token": "poems",
+            "attention": 0.0339
+          },
+          {
+            "token": "marc",
+            "attention": 0.033
+          },
+          {
+            "token": "copyright",
+            "attention": 0.0325
+          },
+          {
+            "token": "bogan",
+            "attention": 0.0325
+          }
+        ],
+        "Mythology & Folklore": [
+          {
+            "token": "pound",
+            "attention": 0.0749
+          },
+          {
+            "token": "ezra",
+            "attention": 0.0693
+          },
+          {
+            "token": "songs",
+            "attention": 0.0558
+          },
+          {
+            "token": "canto",
+            "attention": 0.0522
+          },
+          {
+            "token": "copyright",
+            "attention": 0.0471
+          },
+          {
+            "token": "directions",
+            "attention": 0.0458
+          },
+          {
+            "token": "corporation",
+            "attention": 0.0413
+          },
+          {
+            "token": "reprinted",
+            "attention": 0.0327
+          }
+        ]
+      }
+    }
+  },
+  "track_b_nusantara_pantun": {
+    "sources": [
+      "HuggingFace maercaestro/pantun",
+      "HuggingFace LorthGyu/indonesian-pantun"
+    ],
+    "n_authentic_stanzas": 2949,
+    "source_counts": {
+      "maercaestro": 2927,
+      "lorthgyu": 101
+    },
+    "coherence_rhyme_benchmark": {
+      "n_train": 4424,
+      "n_val": 590,
+      "n_test": 884,
+      "class_names": [
+        "Permuted_Incoherent",
+        "Authentic_Pantun"
+      ],
+      "dual_scale_neural": {
+        "accuracy": 0.7421,
+        "macro_f1": 0.7344,
+        "roc_auc": 0.8058,
+        "val_best_macro_f1": 0.7414,
+        "train_seconds": 59.099,
+        "params": {
+          "total_params": 602546,
+          "trainable_params": 602546
+        }
+      },
+      "tfidf_char_word_baseline": {
+        "accuracy": 0.5305,
+        "macro_f1": 0.5153,
+        "roc_auc": 0.5426
+      },
+      "top_salient_tokens": {
+        "Permuted_Incoherent": [
+          {
+            "token": "menang",
+            "attention": 0.1484
+          },
+          {
+            "token": "berdayung",
+            "attention": 0.1348
+          },
+          {
+            "token": "hidup",
+            "attention": 0.1319
+          },
+          {
+            "token": "kenyang",
+            "attention": 0.1272
+          },
+          {
+            "token": "bertaji",
+            "attention": 0.1264
+          },
+          {
+            "token": "menyerogah",
+            "attention": 0.1242
+          },
+          {
+            "token": "bertaring",
+            "attention": 0.1239
+          },
+          {
+            "token": "benar",
+            "attention": 0.1224
+          }
+        ],
+        "Authentic_Pantun": [
+          {
+            "token": "kepalanya",
+            "attention": 0.1683
+          },
+          {
+            "token": "cokit",
+            "attention": 0.1596
+          },
+          {
+            "token": "kalbu",
+            "attention": 0.1505
+          },
+          {
+            "token": "secangkir",
+            "attention": 0.142
+          },
+          {
+            "token": "bersayu",
+            "attention": 0.1381
+          },
+          {
+            "token": "penyuci",
+            "attention": 0.137
+          },
+          {
+            "token": "hidup",
+            "attention": 0.1304
+          },
+          {
+            "token": "disanjung",
+            "attention": 0.1298
+          }
+        ]
+      }
+    }
+  },
+  "artifacts": {
+    "era_checkpoint": "artifacts/dual_scale_era.pt",
+    "theme_checkpoint": "artifacts/dual_scale_theme.pt",
+    "pantun_checkpoint": "artifacts/dual_scale_pantun.pt",
+    "figure": "reports/humanities_stylometry.png"
+  }
+}

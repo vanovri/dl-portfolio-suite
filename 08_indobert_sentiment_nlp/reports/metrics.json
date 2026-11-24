@@ -1,0 +1,189 @@
+{
+  "project": "08_indobert_sentiment_nlp",
+  "dataset_type": "real_public",
+  "dataset_provenance": {
+    "benchmark": "IndoNLU SmSA (smsa_doc-sentiment-prosa)",
+    "urls": {
+      "train": "https://raw.githubusercontent.com/IndoNLP/indonlu/master/dataset/smsa_doc-sentiment-prosa/train_preprocess.tsv",
+      "valid": "https://raw.githubusercontent.com/IndoNLP/indonlu/master/dataset/smsa_doc-sentiment-prosa/valid_preprocess.tsv",
+      "test": "https://raw.githubusercontent.com/IndoNLP/indonlu/master/dataset/smsa_doc-sentiment-prosa/test_preprocess.tsv"
+    },
+    "split_sizes": {
+      "train": 3600,
+      "valid": 1260,
+      "test": 500
+    },
+    "labels": [
+      "negative",
+      "neutral",
+      "positive"
+    ]
+  },
+  "hyperparameters": {
+    "model_name": "indobenchmark/indobert-base-p1",
+    "epochs": 3,
+    "batch_size": 16,
+    "lr": 2e-05,
+    "warmup_ratio": 0.1,
+    "max_length": 96,
+    "gradient_clip": 1.0,
+    "fp16_amp": true,
+    "seed": 42
+  },
+  "model": {
+    "architecture": "indobenchmark/indobert-base-p1",
+    "total_params": 124443651,
+    "trainable_params": 124443651,
+    "best_val_macro_f1": 0.9051,
+    "history": {
+      "train_loss": [
+        0.37522,
+        0.12633,
+        0.05214
+      ],
+      "val_loss": [
+        0.21956,
+        0.28221,
+        0.31527
+      ],
+      "val_macro_f1": [
+        0.9021,
+        0.8925,
+        0.9051
+      ]
+    }
+  },
+  "test_metrics_indobert": {
+    "accuracy": 0.9,
+    "macro_f1": 0.8629,
+    "per_class_f1": {
+      "negative": 0.9374,
+      "neutral": 0.7297,
+      "positive": 0.9216
+    },
+    "confusion_matrix": [
+      [
+        202,
+        0,
+        2
+      ],
+      [
+        17,
+        54,
+        17
+      ],
+      [
+        8,
+        6,
+        194
+      ]
+    ],
+    "test_loss": 0.4197,
+    "latency_ms_per_text": 23.2602
+  },
+  "test_metrics_tfidf_baseline": {
+    "accuracy": 0.676,
+    "macro_f1": 0.6295,
+    "per_class_f1": {
+      "negative": 0.7605,
+      "neutral": 0.5132,
+      "positive": 0.6149
+    },
+    "confusion_matrix": [
+      [
+        200,
+        2,
+        2
+      ],
+      [
+        36,
+        39,
+        13
+      ],
+      [
+        86,
+        23,
+        99
+      ]
+    ],
+    "fit_elapsed_s": 0.718,
+    "latency_ms_per_text": 0.0643,
+    "model_type": "TfidfVectorizer(1,2) + LogisticRegression(balanced)"
+  },
+  "indobert_vs_tfidf_gain": {
+    "accuracy_delta": 0.224,
+    "macro_f1_delta": 0.2334
+  },
+  "sample_predictions": [
+    {
+      "text": "apl ini sangat membantu sekali dengan memberikan kemudahan dalam pesan tiket to bepergian ke mana pun , sehingga saya tidak harus keluar lagi to mmbli tiket , semoga aplikasi ini selalu lncar ya setiap x melakukan pemesanan .",
+      "predicted_id": 2,
+      "predicted_label": "positive",
+      "confidence": 0.9983,
+      "probabilities": {
+        "negative": 0.0006,
+        "neutral": 0.001,
+        "positive": 0.9983
+      },
+      "true_label": "positive"
+    },
+    {
+      "text": "dua kali sudah teman saya bookingkan tiket lewat aplikasi ini bagus-bagus saja . tidak sampai 2 mnit , kode booking nya langsung dikirimkan . mantap .",
+      "predicted_id": 2,
+      "predicted_label": "positive",
+      "confidence": 0.9991,
+      "probabilities": {
+        "negative": 0.0004,
+        "neutral": 0.0005,
+        "positive": 0.9991
+      },
+      "true_label": "positive"
+    },
+    {
+      "text": "saya suwandi sudah pesan tiket pak - cengkareng tuk penerbangan tanggal 20 jam 06.46 via pesawat nam air . namun sampai dengan hari ini tanggal 17 juli , saya belum terima info apa pun , transfer dari bri syariah ke bank mandiri . mohon bantuan nya untuk diinformasi kembali . terima kasih .",
+      "predicted_id": 1,
+      "predicted_label": "neutral",
+      "confidence": 0.9894,
+      "probabilities": {
+        "negative": 0.0077,
+        "neutral": 0.9894,
+        "positive": 0.0029
+      },
+      "true_label": "neutral"
+    },
+    {
+      "text": "kemarin gue datang ke tempat makan baru yang ada di dago atas . gue kira makanan nya enak karena harga nya mahal . ternyata , boro-boro . tidak mau lagi deh ke tempat itu . sudah mana tempat nya juga tidak nyaman banget , terlalu sempit .",
+      "predicted_id": 0,
+      "predicted_label": "negative",
+      "confidence": 0.9987,
+      "probabilities": {
+        "negative": 0.9987,
+        "neutral": 0.0006,
+        "positive": 0.0008
+      },
+      "true_label": "negative"
+    },
+    {
+      "text": "kayak nya sih gue tidak akan mau balik lagi ke tempat itu . gila , ya , gue enggak ngerti kenapa tempat nya dibiarkan panas . sudah begitu kotor pula . kalau panas kepanasan , kalau hujan kehujanan . harus nya sih tidak ada restoran yang kayak gitu . tidak tahu deh apa yang mereka jual .",
+      "predicted_id": 0,
+      "predicted_label": "negative",
+      "confidence": 0.9987,
+      "probabilities": {
+        "negative": 0.9987,
+        "neutral": 0.0008,
+        "positive": 0.0005
+      },
+      "true_label": "negative"
+    }
+  ],
+  "runtime": {
+    "train_elapsed_s": 1409.653,
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 2635.5,
+    "allocated_vram_mb": 2405.49
+  },
+  "artifacts": {
+    "checkpoint": "artifacts/indobert_smsa_best.pt",
+    "figure": "reports/indobert_eval.png"
+  }
+}

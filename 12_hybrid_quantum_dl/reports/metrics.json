@@ -1,0 +1,135 @@
+{
+  "project": "12_hybrid_quantum_dl",
+  "dataset_type": "real_public",
+  "quantum_verification": {
+    "n_qubits": 4,
+    "n_layers": 3,
+    "hilbert_dim": 16,
+    "unitary_max_error": 2.38608066638335e-07,
+    "norm_max_error": 2.980232238769531e-07,
+    "is_unitary": true,
+    "is_normalized": true
+  },
+  "hyperparameters": {
+    "epochs": 25,
+    "batch_size": 32,
+    "lr": 0.003,
+    "n_qubits": 4,
+    "n_layers": 3,
+    "mc_simulations": 20000,
+    "seed": 42
+  },
+  "hardware": {
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 17.44,
+    "allocated_vram_mb": 16.36,
+    "total_wall_seconds": 116.998
+  },
+  "track_a_drug_discovery_bbbp": {
+    "dataset": "MoleculeNet BBBP (Blood-Brain Barrier Permeability)",
+    "source_url": "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/BBBP.csv",
+    "n_total": 2050,
+    "n_features": 24,
+    "positive_rate": 0.7644,
+    "hybrid_quantum": {
+      "roc_auc": 0.935,
+      "pr_auc": 0.9804,
+      "f1": 0.9114,
+      "accuracy": 0.8669,
+      "brier_score": 0.0957,
+      "val_best_roc_auc": 0.9375,
+      "calibrated_threshold": 0.35,
+      "train_seconds": 70.908,
+      "params": {
+        "total_params": 538,
+        "trainable_params": 538
+      }
+    },
+    "classical_matched_mlp": {
+      "roc_auc": 0.9453,
+      "pr_auc": 0.9835,
+      "f1": 0.9244,
+      "accuracy": 0.8831,
+      "brier_score": 0.0801,
+      "val_best_roc_auc": 0.9388,
+      "calibrated_threshold": 0.475,
+      "train_seconds": 6.016,
+      "params": {
+        "total_params": 550,
+        "trainable_params": 550
+      }
+    }
+  },
+  "track_b_finance_credit_risk": {
+    "dataset": "UCI Statlog German Credit (Default Risk)",
+    "source_url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/german/german.data",
+    "n_total": 1000,
+    "n_features": 61,
+    "default_rate": 0.3,
+    "hybrid_quantum": {
+      "roc_auc": 0.7848,
+      "pr_auc": 0.6073,
+      "f1": 0.6355,
+      "accuracy": 0.74,
+      "brier_score": 0.1687,
+      "val_best_roc_auc": 0.7524,
+      "calibrated_threshold": 0.25,
+      "train_seconds": 34.052,
+      "params": {
+        "total_params": 1130,
+        "trainable_params": 1130
+      }
+    },
+    "classical_matched_mlp": {
+      "roc_auc": 0.8114,
+      "pr_auc": 0.6616,
+      "f1": 0.6535,
+      "accuracy": 0.7667,
+      "brier_score": 0.1529,
+      "val_best_roc_auc": 0.7958,
+      "calibrated_threshold": 0.25,
+      "train_seconds": 3.06,
+      "params": {
+        "total_params": 1142,
+        "trainable_params": 1142
+      }
+    },
+    "portfolio_risk_quantum": {
+      "n_loans": 150,
+      "lgd": 0.45,
+      "asset_correlation_rho": 0.15,
+      "n_simulations": 20000,
+      "total_exposure": 477460.0,
+      "mean_calibrated_pd": 0.2634,
+      "expected_loss": 67429.25,
+      "mc_expected_loss": 67360.36,
+      "var_95": 116619.59,
+      "var_99": 137046.86,
+      "cvar_95": 129386.76,
+      "cvar_99": 147154.12,
+      "expected_loss_pct_exposure": 14.122,
+      "var_99_pct_exposure": 28.703
+    },
+    "portfolio_risk_classical": {
+      "n_loans": 150,
+      "lgd": 0.45,
+      "asset_correlation_rho": 0.15,
+      "n_simulations": 20000,
+      "total_exposure": 477460.0,
+      "mean_calibrated_pd": 0.2729,
+      "expected_loss": 76917.22,
+      "mc_expected_loss": 76806.15,
+      "var_95": 124489.12,
+      "var_99": 143110.84,
+      "cvar_95": 135421.32,
+      "cvar_99": 151526.18,
+      "expected_loss_pct_exposure": 16.11,
+      "var_99_pct_exposure": 29.973
+    }
+  },
+  "artifacts": {
+    "bbbp_checkpoint": "artifacts/hybrid_quantum_bbbp.pt",
+    "credit_checkpoint": "artifacts/hybrid_quantum_german_credit.pt",
+    "figure": "reports/quantum_drug_finance.png"
+  }
+}

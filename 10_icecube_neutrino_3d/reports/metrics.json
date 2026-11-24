@@ -1,0 +1,131 @@
+{
+  "project": "10_icecube_neutrino_3d",
+  "dataset_type": "physics_calibrated_icecube_5160dom",
+  "dataset_provenance": {
+    "dataset_type": "physics_calibrated_icecube_5160dom",
+    "source": "relativistic_cherenkov_simulator",
+    "num_doms": 5160,
+    "standard_strings": 78,
+    "deepcore_strings": 8,
+    "max_pulses": 96,
+    "split_sizes": {
+      "train": 10000,
+      "val": 1500,
+      "test": 2000
+    },
+    "kaggle_dropin_loader": "src.dataset.load_kaggle_icecube_batch"
+  },
+  "hyperparameters": {
+    "epochs": 20,
+    "batch_size": 64,
+    "lr": 0.001,
+    "max_pulses": 96,
+    "fp16_amp": true,
+    "seed": 42
+  },
+  "model": {
+    "architecture": "IceCubePulseTransformer (4-layer Pre-Norm + Fourier 4D + vMF Head)",
+    "total_params": 552516,
+    "trainable_params": 552516,
+    "best_val_mean_angular_error_deg": 5.598,
+    "history": {
+      "train_loss": [
+        -1.34006,
+        -2.756,
+        -3.30297,
+        -3.57939,
+        -3.75773,
+        -3.88295,
+        -3.9986,
+        -4.08774,
+        -4.12543,
+        -4.21986,
+        -4.28739,
+        -4.35806,
+        -4.37467,
+        -4.43751,
+        -4.47037,
+        -4.50497,
+        -4.53372,
+        -4.55659,
+        -4.5772,
+        -4.60173
+      ],
+      "val_loss": [
+        -2.40975,
+        -3.27835,
+        -3.66942,
+        -3.78287,
+        -3.9543,
+        -4.08816,
+        -4.159,
+        -4.17565,
+        -4.18637,
+        -4.33417,
+        -4.40181,
+        -4.41095,
+        -4.43672,
+        -4.47098,
+        -4.50902,
+        -4.5436,
+        -4.56094,
+        -4.57481,
+        -4.56805,
+        -4.57287
+      ],
+      "val_mean_err_deg": [
+        16.459,
+        10.641,
+        8.949,
+        8.764,
+        8.088,
+        7.619,
+        7.267,
+        7.531,
+        7.469,
+        6.759,
+        6.528,
+        6.414,
+        6.336,
+        6.167,
+        5.982,
+        5.806,
+        5.692,
+        5.616,
+        5.634,
+        5.598
+      ]
+    }
+  },
+  "test_metrics_transformer": {
+    "mean_angular_error_rad": 0.0987,
+    "mean_angular_error_deg": 5.652,
+    "median_angular_error_deg": 4.543,
+    "containment_68_deg": 6.372,
+    "containment_90_deg": 10.799,
+    "test_vmf_loss": -4.5739,
+    "mean_predicted_kappa": 95.259
+  },
+  "test_metrics_linefit_baseline": {
+    "mean_angular_error_rad": 0.1921,
+    "mean_angular_error_deg": 11.004,
+    "median_angular_error_deg": 7.113,
+    "containment_68_deg": 10.961,
+    "containment_90_deg": 23.893
+  },
+  "transformer_vs_linefit_improvement": {
+    "mean_angular_error_reduction_rad": 0.0934,
+    "mean_angular_error_reduction_deg": 5.352,
+    "relative_error_reduction_pct": 48.64
+  },
+  "runtime": {
+    "train_elapsed_s": 298.176,
+    "device": "NVIDIA GeForce GTX 1650 Ti",
+    "peak_vram_mb": 148.04,
+    "allocated_vram_mb": 26.83
+  },
+  "artifacts": {
+    "checkpoint": "artifacts/icecube_transformer_best.pt",
+    "figure": "reports/neutrino_reconstruction.png"
+  }
+}
